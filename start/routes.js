@@ -15,7 +15,7 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
-// link, folder path or function
+// link to folder path or function
 Route.on('/').render('homepage')
 
 Route.get('/hiok', 'UserController.goWelcome')
