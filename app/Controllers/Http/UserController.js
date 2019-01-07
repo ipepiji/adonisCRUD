@@ -2,6 +2,8 @@
 
 const Student = use('App/Models/Student')
 
+const { validate } = use('Validator')
+
 class UserController {
     async goWelcome ({view}) {
         return view.render('welcome') //folder path
@@ -25,6 +27,17 @@ class UserController {
     }
 
     async addDB ({request, response, session}) {
+        const validation = await validate(request.all(), {
+            username: 'required|min:6|max:15',
+            password: 'required|min:8'
+        })
+
+        if(validation.fails()){
+            // session.withErrors([{ type: 'danger', message: 'error' }]).flashAll()
+            session.withErrors(validation.messages()).flashAll()
+            return response.redirect('add') //link path
+        }
+
         const student = new Student()
 
         student.username = request.input('username')
