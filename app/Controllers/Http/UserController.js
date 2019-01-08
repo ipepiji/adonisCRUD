@@ -4,6 +4,17 @@ const Student = use('App/Models/Student')
 
 const { validate } = use('Validator')
 
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport')
+
+var transporter = nodemailer.createTransport(smtpTransport({
+    service: 'gmail',
+    auth: {
+      user: 'adonismailtest@gmail.com',
+      pass: 'adonis12345'
+    }
+}));
+
 class UserController {
     async goWelcome ({view}) {
         return view.render('welcome') //folder path
@@ -41,6 +52,7 @@ class UserController {
 
         student.username = request.input('username')
         student.password = request.input('password')
+        student.email = request.input('email')
 
         await student.save()
 
@@ -48,6 +60,21 @@ class UserController {
             type    : 'success',
             message : 'Added !'
         }})
+
+        var mailOptions = {
+            from: 'adonismailtest@gmail.com',
+            to: student.email,
+            subject: 'Sending Email using Node.js',
+            text: 'That was easy!'
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }          
+        });
 
         return response.redirect('add') //link path
     }
@@ -75,6 +102,7 @@ class UserController {
 
         student.username = request.input('username')
         student.password = request.input('password')
+        student.email = request.input('email')
 
         await student.save()
 

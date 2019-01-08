@@ -9,6 +9,7 @@ class StudentSchema extends Schema {
       table.increments()
       table.string('username', 255)
       table.string('password', 255)
+      table.string('email', 255)
       table.timestamps()
     })
   }

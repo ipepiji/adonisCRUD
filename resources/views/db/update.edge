@@ -6,14 +6,18 @@
         <form action="/update/{{ data.id }}?_method=PUT" method="POST">
             {{ csrfField() }}
             <div class="form-group">
-            <label>Username</label> 
-            <input type="text" class="form-control" name="username" value="{{ old('username',data.username) }}">
-            {{ elIf( '<span class="text-danger">$self</span>', getErrorFor('username'), hasErrorFor('username')) }}
+                <label>Username</label> 
+                <input type="text" class="form-control" name="username" value="{{ old('username',data.username) }}">
+                {{ elIf( '<span class="text-danger">$self</span>', getErrorFor('username'), hasErrorFor('username')) }}
             </div>
             <div class="form-group">
-            <label>Password</label> 
-            <input type="password" class="form-control" name="password" value="{{ old('password',data.password) }}">
-            {{ elIf('<span class="text-danger">$self</span>', getErrorFor('password'), hasErrorFor('password')) }}
+                <label>Password</label> 
+                <input type="password" class="form-control" name="password" value="{{ old('password',data.password) }}">
+                {{ elIf('<span class="text-danger">$self</span>', getErrorFor('password'), hasErrorFor('password')) }}
+            </div>
+            <div class="form-group">
+                <label>Email</label> 
+                <input type="email" class="form-control" name="email" value="{{ old('email',data.email) }}">
             </div>
             <br><button type="submit" class="btn btn-primary">Submit</button>
         </form>   
