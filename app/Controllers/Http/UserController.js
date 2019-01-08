@@ -15,7 +15,6 @@ class UserController {
         return view.render('db/list', {
             data : student.toJSON() //More than one need to be bundled in JSON
         })
-
     }
 
     async viewDBbyID ({params, view}) {
@@ -51,6 +50,54 @@ class UserController {
         }})
 
         return response.redirect('add') //link path
+    }
+
+    async editDB ({params, view}) {
+        const student = await Student.findBy('id', params.id) //column, params link // Student.find(params.id) also can
+
+        return view.render('db/update', {
+            data : student
+        })
+    }
+
+    async updateDB ({response, request, params, session}) {
+        const validation = await validate(request.all(), {
+            username: 'required|min:6|max:15',
+            password: 'required|min:8'
+        })
+
+        if(validation.fails()) {
+            session.withErrors(validation.messages()).flashAll()
+            return response.redirect('back')
+        }
+
+        const student = await Student.findBy('id', params.id)
+
+        student.username = request.input('username')
+        student.password = request.input('password')
+
+        await student.save()
+
+        session.flash({ notification: {
+            type : 'success',
+            message : "Updated !"
+        } })
+
+        return response.redirect('/viewAll')
+    }
+
+    async deleteDB({response, request, session, params}) {
+
+        const student = await Student.findBy('id', params.id)
+
+        await student.delete()
+
+        session.flash({ notification: {
+            type : 'danger',
+            message : "Deleted !"
+        } })
+
+        return response.redirect('/viewAll')
     }
 }
 

@@ -16,6 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 // link and folder path or function
+// ada '/' kt depan start link from base, kalau x de die sambung dgn previous link
 Route.on('/').render('homepage')
 
 Route.get('/hiok', 'UserController.goWelcome')
@@ -27,3 +28,9 @@ Route.get('/viewByID/:id', 'UserController.viewDBbyID')
 Route.on('/add').render('db/add')
 
 Route.post('/register', 'UserController.addDB')
+
+Route.get('/edit/:id', 'UserController.editDB')
+
+Route.put('/update/:id', 'UserController.updateDB')
+
+Route.delete('/delete/:id', 'UserController.deleteDB')

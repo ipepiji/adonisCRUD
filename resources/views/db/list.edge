@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    @each(student in data)
-        <br>Username : {{ student.username }}
-        <br>Password : {{ student.password }}
-    @endeach
-</body>
-</html>
+@layout('main')
+    @section('content')
+        @if(flashMessage('notification'))  
+        <div class="alert alert-{{flashMessage('notification.type')}}">
+            {{ flashMessage('notification.message') }}
+        </div>
+        @endif
+        <body>
+            @each(student in data)
+                
+                <form action="/delete/{{ student.id }}?_method=DELETE" method="POST">
+                    <br>
+                    {{ csrfField() }}
+                    Username : <a href="/edit/{{ student.id }}">{{ student.username }}</a>
+                    &nbsp 
+                    Password : {{ student.password }}
+                    &nbsp
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <br>
+                </form>
+            @endeach
+    @endsection
