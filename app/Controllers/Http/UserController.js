@@ -15,6 +15,21 @@ var transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+var handlebars = require('handlebars');
+var fs = require('fs');
+
+var readHTMLFile = function(path, callback) {
+    fs.readFile(path, {encoding: 'utf-8'}, function (err, fileHTML) {
+        if (err) {
+            throw err;
+            callback(err);
+        }
+        else {
+            callback(null, fileHTML);
+        }
+    });
+};
+
 class UserController {
     async goWelcome ({view}) {
         return view.render('welcome') //folder path
@@ -61,19 +76,29 @@ class UserController {
             message : 'Added !'
         }})
 
-        var mailOptions = {
-            from: 'adonismailtest@gmail.com',
-            to: student.email,
-            subject: 'Sending Email using Node.js',
-            text: 'That was easy!'
-        };
+        readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {
+            var template = handlebars.compile(fileHTML);
+            var parametersToSend = {
+                 username: student.username,
+                 link: "http://localhost:3333/viewByID/"+student.id
+            };
+            var htmlToSend = template(parametersToSend);
 
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }          
+            var mailOptions = {
+                from: 'adonismailtest@gmail.com',
+                to: student.email,
+                subject: 'Sending Email using Node.js',
+                html: htmlToSend
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                console.log(error);
+                } else {
+                console.log('Email sent: ' + info.response);
+                }          
+            });
+            
         });
 
         return response.redirect('add') //link path
