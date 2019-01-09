@@ -5,7 +5,7 @@ const Student = use('App/Models/Student')
 const { validate } = use('Validator')
 
 var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport')
+var smtpTransport = require('nodemailer-smtp-transport')    //Need to send email for security reason
 
 var transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
@@ -18,7 +18,7 @@ var transporter = nodemailer.createTransport(smtpTransport({
 var handlebars = require('handlebars');
 var fs = require('fs');
 
-var readHTMLFile = function(path, callback) {
+var readHTMLFile = function(path, callback) {   
     fs.readFile(path, {encoding: 'utf-8'}, function (err, fileHTML) {
         if (err) {
             throw err;
@@ -76,22 +76,22 @@ class UserController {
             message : 'Added !'
         }})
 
-        readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {
-            var template = handlebars.compile(fileHTML);
-            var parametersToSend = {
+        readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
+            var template = handlebars.compile(fileHTML);    //parse file
+            var parametersToSend = {    //pass variables
                  username: student.username,
                  link: "http://localhost:3333/viewByID/"+student.id
             };
-            var htmlToSend = template(parametersToSend);
+            var htmlToSend = template(parametersToSend);    //combine
 
-            var mailOptions = {
+            var mailOptions = { //setting email
                 from: 'adonismailtest@gmail.com',
                 to: student.email,
                 subject: 'Sending Email using Node.js',
-                html: htmlToSend
+                html: htmlToSend  //text:
             };
 
-            transporter.sendMail(mailOptions, function(error, info){
+            transporter.sendMail(mailOptions, function(error, info){    //function email
                 if (error) {
                 console.log(error);
                 } else {
