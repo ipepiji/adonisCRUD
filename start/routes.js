@@ -19,7 +19,7 @@ const Route = use('Route')
 // ada '/' kt depan start link from base, kalau x de die sambung dgn previous link
 Route.on('/').render('homepage')
 
-Route.get('/hiok', 'UserController.goWelcome')
+Route.get('/welcome', 'UserController.goWelcome')
 
 Route.get('/viewAll', 'UserController.viewDB')
 

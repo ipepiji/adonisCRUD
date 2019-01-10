@@ -30,8 +30,16 @@ var readHTMLFile = function(path, callback) {
     });
 };
 
+const btc_rpc = require('node-bitcoin-rpc')
+
 class UserController {
     async goWelcome ({view}) {
+        btc_rpc.call('fizzzy59','listaccounts',[],function(err,result){
+            if(err)
+                console.log("error")
+
+            console.log(result)
+        })
         return view.render('welcome') //folder path
     }
 
@@ -46,6 +54,7 @@ class UserController {
     async viewDBbyID ({params, view}) {
         const student = await Student.findBy('id', params.id) //column, params link // Student.find(params.id) also can
 
+        console.log(student)
         return view.render('db/listbyid', {
             data : student  //No need in JSON but also can in JSON
         })
