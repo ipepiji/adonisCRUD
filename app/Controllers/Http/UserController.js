@@ -21,7 +21,6 @@ var fs = require('fs');
 var readHTMLFile = function(path, callback) {   
     fs.readFile(path, {encoding: 'utf-8'}, function (err, fileHTML) {
         if (err) {
-            throw err;
             callback(err);
         }
         else {
@@ -34,11 +33,12 @@ const btc_rpc = require('node-bitcoin-rpc')
 
 class UserController {
     async goWelcome ({view}) {
-        btc_rpc.call('fizzzy59','listaccounts',[],function(err,result){
+
+        btc_rpc.call('','listwallets',[],function(err,result){
             if(err)
                 console.log("error")
 
-            console.log(result)
+            console.log(result.result)
         })
         return view.render('welcome') //folder path
     }
