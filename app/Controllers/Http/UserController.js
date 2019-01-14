@@ -34,7 +34,7 @@ const btc_rpc = require('node-bitcoin-rpc')
 class UserController {
     async goWelcome ({view}) {
 
-        btc_rpc.call('','listwallets',[],function(err,result){
+        btc_rpc.call('ipepiji','getbalance',['rhb'],function(err,result){
             if(err)
                 console.log("error")
 
