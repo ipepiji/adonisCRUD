@@ -23,7 +23,9 @@ Route.get('/welcome', 'UserController.goWelcome')
 
 Route.get('/viewAll', 'UserController.viewDB')
 
-Route.get('/viewByID/:id', 'UserController.viewDBbyID')
+Route.get('/viewByID/:id/:token', 'UserController.viewDBbyID')
+
+Route.get('/viewByToken/:token', 'UserController.viewDBbyID')
 
 Route.on('/add').render('db/add')
 
@@ -34,3 +36,5 @@ Route.get('/edit/:id', 'UserController.editDB')
 Route.put('/update/:id', 'UserController.updateDB')
 
 Route.delete('/delete/:id', 'UserController.deleteDB')
+
+Route.get('/token', 'UserController.pageWithToken')

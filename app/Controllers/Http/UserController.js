@@ -1,11 +1,11 @@
 'use strict'
 
-const Student = use('App/Models/Student')
+const Student = use('App/Models/Student');
 
-const { validate } = use('Validator')
+const { validate } = use('Validator');
 
 var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport')    //Need to send email for security reason
+var smtpTransport = require('nodemailer-smtp-transport');    //Need to send email for security reason
 
 var transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
@@ -29,11 +29,13 @@ var readHTMLFile = function(path, callback) {
     });
 };
 
-const btc_rpc = require('node-bitcoin-rpc')
+const btc_rpc = require('node-bitcoin-rpc');
+
+var jwt = require('jsonwebtoken');
 
 class UserController {
     async goWelcome ({view}) {
-
+        
         btc_rpc.call('ipepiji','getbalance',['rhb'],function(err,result){
             if(err)
                 console.log("error")
@@ -52,12 +54,17 @@ class UserController {
     }
 
     async viewDBbyID ({params, view}) {
-        const student = await Student.findBy('id', params.id) //column, params link // Student.find(params.id) also can
+        // check valid or invalid token - synchronous function
+        try {
+            var decoded = jwt.verify(params.token, 'secret');
 
-        console.log(student)
-        return view.render('db/listbyid', {
-            data : student  //No need in JSON but also can in JSON
-        })
+            const student = await Student.findBy('id', decoded.data)
+                return view.render('db/listbyid', {
+                    data : student  //No need in JSON but also can in JSON
+                })
+        } catch(err) {
+            console.log(err.message)
+        }
     }
 
     async addDB ({request, response, session}) {
@@ -86,10 +93,13 @@ class UserController {
         }})
 
         readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
+            var token = jwt.sign({
+                data: student.id
+              }, 'secret', { expiresIn: 60 });
             var template = handlebars.compile(fileHTML);    //parse file
             var parametersToSend = {    //pass variables
                  username: student.username,
-                 link: "http://localhost:3333/viewByID/"+student.id
+                 link: "http://localhost:3333/viewByToken/"+token
             };
             var htmlToSend = template(parametersToSend);    //combine
 
@@ -160,6 +170,55 @@ class UserController {
         } })
 
         return response.redirect('/viewAll')
+    }
+
+    async pageWithToken({ response }){
+        readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
+            var token = jwt.sign({
+                data: 'hiok3'
+              }, 'secret', { expiresIn: 60 * 60 });
+              console.log(token)
+            var template = handlebars.compile(fileHTML);    //parse file
+            var parametersToSend = {    //pass variables
+                 username: "Bruh",
+                 link: "http://localhost:3333/viewByID/"+token
+            };
+            var htmlToSend = template(parametersToSend);    //combine
+
+            var mailOptions = { //setting email
+                from: 'adonismailtest@gmail.com',
+                to: 'adonismailtest@gmail.com',
+                subject: 'Testing',
+                html: htmlToSend  //text:
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){    //function email
+                if (error) {
+                console.log(error);
+                } else {
+                console.log('Email sent: ' + info.response);
+                }          
+            });
+
+            // check valid or invalid token - asynchronous function
+            jwt.verify(token, 'secret', function(err, decoded) {
+                if (err) {
+                  /*
+                    err = {
+                      name: 'TokenExpiredError',
+                      message: 'jwt expired',
+                      expiredAt: 1408621000
+                    }
+                  */
+                 console.log(err.message)
+                }
+                
+                console.log(decoded)
+              });
+            
+        });
+
+        return response.redirect('/') //link path
     }
 }
 
