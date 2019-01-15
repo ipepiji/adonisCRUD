@@ -62,7 +62,7 @@ class UserController {
                 return view.render('db/listbyid', {
                     data : student  //No need in JSON but also can in JSON
                 })
-        } catch(err) {
+        } catch(err) {  //expired token
             console.log(err.message)
         }
     }
@@ -175,13 +175,13 @@ class UserController {
     async pageWithToken({ response }){
         readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
             var token = jwt.sign({
-                data: 'hiok3'
+                data: 1
               }, 'secret', { expiresIn: 60 * 60 });
               console.log(token)
             var template = handlebars.compile(fileHTML);    //parse file
             var parametersToSend = {    //pass variables
                  username: "Bruh",
-                 link: "http://localhost:3333/viewByID/"+token
+                 link: "http://localhost:3333/viewByToken/"+token
             };
             var htmlToSend = template(parametersToSend);    //combine
 
