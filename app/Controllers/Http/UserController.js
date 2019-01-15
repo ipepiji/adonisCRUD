@@ -39,9 +39,10 @@ class UserController {
         btc_rpc.call('ipepiji','getbalance',['rhb'],function(err,result){
             if(err)
                 console.log("error")
-
+            console.log(1)
             console.log(result.result)
         })
+
         return view.render('welcome') //folder path
     }
 
@@ -94,7 +95,7 @@ class UserController {
 
         readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
             var token = jwt.sign({
-                data: student.id
+                data: student.id    //payload = data untuk disimpan
               }, 'secret', { expiresIn: 60 });
             var template = handlebars.compile(fileHTML);    //parse file
             var parametersToSend = {    //pass variables
