@@ -17,7 +17,7 @@ var btc = use('App/ownModules/btc-rpc-call');
 class UserController {
     async goWelcome ({ view}) {
         
-        const data = await btc.rpc_call('','listwallets',[])
+        const data = await btc.rpc_call('ipepiji','listtransactions',[])
         console.log(data)
 
         return view.render('welcome', { 
