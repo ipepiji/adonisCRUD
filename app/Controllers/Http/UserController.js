@@ -4,46 +4,25 @@ const Student = use('App/Models/Student');
 
 const { validate } = use('Validator');
 
-var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');    //Need to send email for security reason
+var transporter = use('App/ownModules/email-config');
 
-var transporter = nodemailer.createTransport(smtpTransport({
-    service: 'gmail',
-    auth: {
-      user: 'adonismailtest@gmail.com',
-      pass: 'adonis12345'
-    }
-}));
+var fileRead = use('App/ownModules/read-file-html');
 
 var handlebars = require('handlebars');
-var fs = require('fs');
-
-var readHTMLFile = function(path, callback) {   
-    fs.readFile(path, {encoding: 'utf-8'}, function (err, fileHTML) {
-        if (err) {
-            callback(err);
-        }
-        else {
-            callback(null, fileHTML);
-        }
-    });
-};
-
-const btc_rpc = require('node-bitcoin-rpc');
 
 var jwt = require('jsonwebtoken');
 
-class UserController {
-    async goWelcome ({view}) {
-        
-        btc_rpc.call('ipepiji','getbalance',['rhb'],function(err,result){
-            if(err)
-                console.log("error")
-            console.log(1)
-            console.log(result.result)
-        })
+var btc = use('App/ownModules/btc-rpc-call');
 
-        return view.render('welcome') //folder path
+class UserController {
+    async goWelcome ({ view}) {
+        
+        const data = await btc.rpc_call('ipepiji','getaddressesbyaccount',['rhb'])
+        console.log(data)
+
+        return view.render('welcome', { 
+            username : data.result
+        }) //folder path
     }
 
     async viewDB ({view}) {
@@ -93,7 +72,7 @@ class UserController {
             message : 'Added !'
         }})
 
-        readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
+        fileRead.readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
             var token = jwt.sign({
                 data: student.id    //payload = data untuk disimpan
               }, 'secret', { expiresIn: 60 });
@@ -174,7 +153,7 @@ class UserController {
     }
 
     async pageWithToken({ response }){
-        readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
+        fileRead.readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
             var token = jwt.sign({
                 data: 1
               }, 'secret', { expiresIn: 60 * 60 });

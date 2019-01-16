@@ -33,7 +33,8 @@
     "mysql": "^2.16.0",
     "node-bitcoin-rpc": "^1.1.3",
     "nodemailer": "^5.0.0",
-    "nodemailer-smtp-transport": "^2.7.4"
+    "nodemailer-smtp-transport": "^2.7.4",
+    "promise": "^8.0.2"
   },
   "devDependencies": {},
   "autoload": {
