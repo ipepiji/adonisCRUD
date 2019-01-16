@@ -17,12 +17,16 @@ var btc = use('App/ownModules/btc-rpc-call');
 class UserController {
     async goWelcome ({ view}) {
         
-        const data = await btc.rpc_call('ipepiji','listtransactions',[])
+        const data = await btc.rpc_call('ipepiji','getaddressesbyaccount',['rhb'])
         console.log(data)
 
-        return view.render('welcome', { 
-            result : data.result
-        }) //folder path
+        if(data.error)
+            console.log("ERROR !")
+        else{
+            return view.render('welcome', { 
+                result : data.result
+            }) //folder path
+        }
     }
 
     async viewDB ({view}) {
