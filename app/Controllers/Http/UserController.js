@@ -17,11 +17,11 @@ var btc = use('App/ownModules/btc-rpc-call');
 class UserController {
     async goWelcome ({ view}) {
         
-        const data = await btc.rpc_call('ipepiji','getaddressesbyaccount',['rhb'])
+        const data = await btc.rpc_call('','listwallets',[])
         console.log(data)
 
         return view.render('welcome', { 
-            username : data.result
+            result : data.result
         }) //folder path
     }
 
