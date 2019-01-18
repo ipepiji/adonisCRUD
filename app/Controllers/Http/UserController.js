@@ -14,6 +14,8 @@ var jwt = require('jsonwebtoken');
 
 var btc = use('App/ownModules/btc-rpc-call');
 
+var inLineCss = require('nodemailer-juice');
+
 class UserController {
     async goWelcome ({ view}) {
         
@@ -93,6 +95,8 @@ class UserController {
                 subject: 'Sending Email using Node.js',
                 html: htmlToSend  //text:
             };
+
+            transporter.use('compile', inLineCss());
 
             transporter.sendMail(mailOptions, function(error, info){    //function email
                 if (error) {

@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="public/css/bootstrap.min.css">
+
 @each(result in result)
 <p> Account :  {{ result.account }} &nbsp Address : {{ result.address }} &nbsp Amount : {{ result.amount }} &nbsp Category : {{ result.category }}</p>
 <br>    
@@ -5,7 +7,4 @@
 <p>
     Welcome to AdonisJS, please confirm your email address by clicking the link below:
 </p>
-
-<p>
-    <a href="{{ link }}">Confirm email address</a>
-</p>
+<a href="{{ link }}"><button type="button" class="btn btn-success">Confirm Email</button></a>
