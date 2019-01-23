@@ -79,13 +79,16 @@ class UserController {
         }})
 
         fileRead.readHTMLFile('./resources/views/welcome.edge', function(err, fileHTML) {    //path, callbackfunction
+            const Env = use('Env')
+            const APP_URL = Env.get('APP_URL')  //get host and port  : https://127.0.0.1:3333 or localhost:3333
+
             var token = jwt.sign({
                 data: student.id    //payload = data untuk disimpan
               }, 'secret', { expiresIn: 60 });
             var template = handlebars.compile(fileHTML);    //parse file
             var parametersToSend = {    //pass variables
                  username: student.username,
-                 link: "http://localhost:3333/viewByToken/"+token
+                 link: APP_URL+"/viewByToken/"+token
             };
             var htmlToSend = template(parametersToSend);    //combine
 
