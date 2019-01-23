@@ -233,7 +233,7 @@ class UserController {
                         .first()
 
         if(student){
-            await auth.login(student)
+            await auth.login(student)   //data student simpan dalam auth....sama je macam php _SESSION
             return response.route('mukadepan')    //same return response.redirect('/hiokhiok')
         }
         else{
