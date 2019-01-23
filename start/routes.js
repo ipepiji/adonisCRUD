@@ -38,3 +38,11 @@ Route.put('/update/:id', 'UserController.updateDB')
 Route.delete('/delete/:id', 'UserController.deleteDB')
 
 Route.get('/token', 'UserController.pageWithToken')
+
+Route.on('/login').render('db/login')
+
+Route.post('/login', 'UserController.login').as('login')    //.as('login') - action="{{route('login')}}"
+
+Route.on('hiokhiok').render('db/homepage').as('mukadepan')
+
+Route.get('/logout', 'UserController.logout')

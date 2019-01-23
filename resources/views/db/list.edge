@@ -1,10 +1,6 @@
 @layout('main')
     @section('content')
-        @if(flashMessage('notification'))  
-        <div class="alert alert-{{flashMessage('notification.type')}}">
-            {{ flashMessage('notification.message') }}
-        </div>
-        @endif
+        @include('notification')
         <body>
             @each(student in data)
                 

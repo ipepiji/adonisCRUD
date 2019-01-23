@@ -62,7 +62,7 @@ class UserController {
         if(validation.fails()){
             // session.withErrors([{ type: 'danger', message: 'error' }]).flashAll()
             session.withErrors(validation.messages()).flashAll()
-            return response.redirect('add') //link path
+            return response.redirect('back') //link path
         }
 
         const student = new Student()
@@ -210,6 +210,50 @@ class UserController {
         });
 
         return response.redirect('/') //link path
+    }
+
+    async login({ request, response, session, auth }){
+        const validation = await validate(request.all(), {
+            username: 'required|min:6|max:15',
+            password: 'required|min:8'
+        })
+
+        if(validation.fails()){
+            // session.withErrors([{ type: 'danger', message: 'error' }]).flashAll()
+            session.withErrors(validation.messages()).flashAll()
+            return response.redirect('back') //link path
+        }
+
+        const input_username = request.input('username')
+        const input_password = request.input('password')
+
+        const student = await Student.query()
+                        .where('username', input_username)
+                        .where('password', input_password)
+                        .first()
+
+        if(student){
+            await auth.login(student)
+            return response.route('mukadepan')    //same return response.redirect('/hiokhiok')
+        }
+        else{
+            session.flash({ notification : {
+                type    : 'danger',
+                message : 'Wrong credential !'
+            }})
+
+            return response.redirect('back')
+        }
+    }
+
+    async logout({ response,session,auth }){
+        await auth.logout();
+        session.flash({ notification : {
+            type    : 'success',
+            message : 'You successfully logout!'
+        }})
+
+        return response.route('login')
     }
 }
 
