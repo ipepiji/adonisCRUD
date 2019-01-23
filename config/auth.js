@@ -29,7 +29,7 @@ module.exports = {
   */
   session: {
     serializer: 'lucid',
-    model: 'App/Models/Student',
+    model: 'App/Models/Student',    //setting table mana nk gune auth
     scheme: 'session',
     uid: 'email',
     password: 'password'

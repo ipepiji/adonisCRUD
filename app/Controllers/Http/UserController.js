@@ -233,7 +233,7 @@ class UserController {
                         .first()
 
         if(student){
-            await auth.login(student)   //data student simpan dalam auth....sama je macam php _SESSION
+            await auth.login(student)   //data student simpan dalam auth....sama je macam php _SESSION['']
             return response.route('mukadepan')    //same return response.redirect('/hiokhiok')
         }
         else{
@@ -247,7 +247,7 @@ class UserController {
     }
 
     async logout({ response,session,auth }){
-        await auth.logout();
+        await auth.logout();    //sama je mcm session_destroy()
         session.flash({ notification : {
             type    : 'success',
             message : 'You successfully logout!'
