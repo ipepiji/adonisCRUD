@@ -27,7 +27,7 @@ Route.get('/viewByID/:id/:token', 'UserController.viewDBbyID')
 
 Route.get('/viewByToken/:token', 'UserController.viewDBbyID')
 
-Route.on('/add').render('db/add')
+// Route.on('system/add').render('db/add').middleware(['authenticated']) //middleware selagi tak logout, xleh g page add and will auto redirect to mukadepan/hiokhiok page
 
 Route.post('/register', 'UserController.addDB')
 
@@ -39,10 +39,17 @@ Route.delete('/delete/:id', 'UserController.deleteDB')
 
 Route.get('/token', 'UserController.pageWithToken')
 
-Route.on('/login').render('db/login')
+// Route.on('system/login').render('db/login').middleware(['authenticated'])     //middleware selagi tak logout, xleh g page login and will auto redirect to mukadepan/hiokhiok page
 
 Route.post('/login', 'UserController.login').as('login')    //.as('login') - action="{{route('login')}}"
 
-Route.on('hiokhiok').render('db/homepage').as('mukadepan')
+Route.on('/hiokhiok').render('db/homepage').as('mukadepan').middleware(['auth'])
 
 Route.get('/logout', 'UserController.logout')
+
+Route.group(() => { 
+    Route.on('/add').render('db/add')
+    Route.on('/login').render('db/login')
+})
+.prefix('/system')
+.middleware(['authenticated'])

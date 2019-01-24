@@ -113,7 +113,7 @@ class UserController {
             
         });
 
-        return response.route('login') //link path
+        return response.route('system/login') //link path
     }
 
     async editDB ({params, view}) {
@@ -267,7 +267,7 @@ class UserController {
             message : 'You successfully logout!'
         }})
 
-        return response.route('login')
+        return response.route('system/login')
     }
 }
 
