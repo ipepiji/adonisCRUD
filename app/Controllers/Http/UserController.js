@@ -47,7 +47,8 @@ class UserController {
             var decoded = jwt.verify(params.token, 'secret');
 
             const student = await Student.findBy('id', decoded.data)
-                return view.render('db/listbyid', {
+                
+            return view.render('db/listbyid', {
                     data : student  //No need in JSON but also can in JSON
                 })
         } catch(err) {  //expired token
@@ -234,7 +235,7 @@ class UserController {
                         .first()
 
         if(student){
-
+            
             const verifyPassword = await Hash.verify(input_password, student.password)  //check password dgn hashed password kt db
 
             if(verifyPassword){
