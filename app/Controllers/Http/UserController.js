@@ -16,6 +16,8 @@ var btc = use('App/ownModules/btc-rpc-call');
 
 var inLineCss = require('nodemailer-juice');
 
+const Hash = use('Hash')    //decoded hash student password
+
 class UserController {
     async goWelcome ({ view}) {
         
@@ -111,7 +113,7 @@ class UserController {
             
         });
 
-        return response.redirect('add') //link path
+        return response.route('login') //link path
     }
 
     async editDB ({params, view}) {
@@ -229,17 +231,29 @@ class UserController {
 
         const student = await Student.query()
                         .where('username', input_username)
-                        .where('password', input_password)
                         .first()
 
         if(student){
-            await auth.login(student)   //data student simpan dalam auth....sama je macam php _SESSION['']
-            return response.route('mukadepan')    //same return response.redirect('/hiokhiok')
+
+            const verifyPassword = await Hash.verify(input_password, student.password)  //check password dgn hashed password kt db
+
+            if(verifyPassword){
+                await auth.login(student)   //data student simpan dalam auth....sama je macam php _SESSION['']
+                return response.route('mukadepan')    //same return response.redirect('/hiokhiok')
+            }
+            else{
+                session.flash({ notification : {
+                    type    : 'danger',
+                    message : 'Wrong password !'
+                }})
+
+                return response.redirect('back')
+            }
         }
         else{
             session.flash({ notification : {
                 type    : 'danger',
-                message : 'Wrong credential !'
+                message : 'Wrong username !'
             }})
 
             return response.redirect('back')
