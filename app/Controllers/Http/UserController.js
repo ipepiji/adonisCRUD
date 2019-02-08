@@ -270,6 +270,11 @@ class UserController {
 
         return response.route('system/login')
     }
+
+    async generateQRCode({ view }){
+
+        return view.render('qrcode')
+    }
 }
 
 module.exports = UserController

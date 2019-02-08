@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>QR Code</title>
+
+    <style>
+        #qrcode {
+            width:160px;
+            height:160px;
+            margin-top:15px;
+        }
+    </style>
+
+</head>
+<body onload=makeCode()>
+    <select id="account" onchange=makeCode()>
+        <option value='ABC'>RHB</option>
+        <option value='DEF'>CIMB</option>
+        <option value='GHI'>MAYBANK</option>
+    </select>
+
+    <br/>
+
+    <div id="qrcode"></div>
+
+</body>
+</html>
+
+<script src='http://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js'></script>
+
+<script>
+
+    var qrcode = new QRCode("qrcode");
+
+    function makeCode () {		
+        var option = document.getElementById("account");
+        qrcode.makeCode(option.value);
+    }
+
+</script>

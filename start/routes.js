@@ -53,3 +53,5 @@ Route.group(() => {
 })
 .prefix('/system')
 .middleware(['authenticated'])
+
+Route.get('/qrcode', 'UserController.generateQRCode')
