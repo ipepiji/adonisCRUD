@@ -35,7 +35,8 @@
     "nodemailer": "^5.0.0",
     "nodemailer-juice": "^1.0.1",
     "nodemailer-smtp-transport": "^2.7.4",
-    "promise": "^8.0.2"
+    "promise": "^8.0.2",
+    "pusher": "^2.2.0"
   },
   "devDependencies": {},
   "autoload": {

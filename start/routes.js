@@ -55,3 +55,10 @@ Route.group(() => {
 .middleware(['authenticated'])
 
 Route.get('/qrcode', 'UserController.generateQRCode')
+
+//pusher
+Route.on('live-chat').render('pusher.chat').as('chat')
+
+Route.post('/live-chat/send','UserController.sendMessage').as('sendMessage')
+
+Route.on('view-chat').render('pusher.view')

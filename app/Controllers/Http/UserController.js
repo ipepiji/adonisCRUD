@@ -18,6 +18,8 @@ var inLineCss = require('nodemailer-juice');
 
 const Hash = use('Hash')    //decoded hash student password
 
+const Event = use('Event')
+
 class UserController {
     async goWelcome ({ view}) {
         
@@ -274,6 +276,16 @@ class UserController {
     async generateQRCode({ view }){
 
         return view.render('qrcode')
+    }
+
+    async sendMessage({request, session, response}){
+        const message = request.input('message')
+
+        Event.fire('send.message', message)
+
+        session.flash({ status: 'Message sent' })
+        return response.redirect('back')
+
     }
 }
 
