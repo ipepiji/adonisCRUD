@@ -287,6 +287,15 @@ class UserController {
         return response.redirect('back')
 
     }
+
+    async sendPushNotification({request, session, response}){
+        const message = request.input('message');
+
+        Event.fire('send.notification', message)
+
+        session.flash({status: 'Notification sent'})
+        return response.redirect('back')
+    }
 }
 
 module.exports = UserController

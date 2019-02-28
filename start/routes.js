@@ -57,8 +57,15 @@ Route.group(() => {
 Route.get('/qrcode', 'UserController.generateQRCode')
 
 //pusher
+
+//chat
 Route.on('live-chat').render('pusher.chat').as('chat')
 
 Route.post('/live-chat/send','UserController.sendMessage').as('sendMessage')
 
 Route.on('view-chat').render('pusher.view')
+
+//push-notification
+Route.on('push-notification').render('pusher.send-push-notification').as('pushN')
+
+Route.post('/push-notification/send','UserController.sendPushNotification').as('sendPushNotification')
