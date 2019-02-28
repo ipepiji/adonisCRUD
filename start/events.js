@@ -12,13 +12,13 @@ const pusher = new Pusher({
         encrypted: true
 });
 
-Event.when('send.message', async (message) => {
+Event.on('send::message', async (message) => {
         pusher.trigger('obc-channel', 'send-message', {
                 message
         });
 })
 
-Event.when('send.notification', async (message) => {
+Event.on('send::notification', async (message) => {
         pusher.trigger('btc-channel', 'new-notification', {
                 message
         });

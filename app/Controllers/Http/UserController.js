@@ -281,7 +281,7 @@ class UserController {
     async sendMessage({request, session, response}){
         const message = request.input('message')
 
-        Event.fire('send.message', message)
+        Event.fire('send::message', message)
 
         session.flash({ status: 'Message sent' })
         return response.redirect('back')
@@ -291,7 +291,7 @@ class UserController {
     async sendPushNotification({request, session, response}){
         const message = request.input('message');
 
-        Event.fire('send.notification', message)
+        Event.fire('send::notification', message)
 
         session.flash({status: 'Notification sent'})
         return response.redirect('back')
