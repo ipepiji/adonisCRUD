@@ -27,6 +27,7 @@
     "@adonisjs/session": "^1.0.27",
     "@adonisjs/shield": "^1.0.8",
     "@adonisjs/validator": "^5.0.6",
+    "adonis-throttle": "^2.3.3",
     "fs": "0.0.1-security",
     "handlebars": "^4.0.12",
     "jsonwebtoken": "^8.4.0",
@@ -36,7 +37,8 @@
     "nodemailer-juice": "^1.0.1",
     "nodemailer-smtp-transport": "^2.7.4",
     "promise": "^8.0.2",
-    "pusher": "^2.2.0"
+    "pusher": "^2.2.0",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {},
   "autoload": {

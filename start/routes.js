@@ -69,3 +69,15 @@ Route.on('view-chat').render('pusher.view')
 Route.on('push-notification').render('pusher.send-push-notification').as('pushN')
 
 Route.post('/push-notification/send','UserController.sendPushNotification').as('sendPushNotification')
+
+Route.get('/testapi','UserController.getAPI')
+
+//restapi
+Route.post('/api/v1/token','ApiController.createToken')
+
+Route.group(() => {
+    Route.get('/user','ApiController.getUser')
+})
+.prefix('/api/v1')
+.middleware('throttle:1')
+// .middleware(['auth:jwt'])

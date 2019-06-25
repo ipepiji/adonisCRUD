@@ -20,6 +20,8 @@ const Hash = use('Hash')    //decoded hash student password
 
 const Event = use('Event')
 
+const rp = require('request-promise');
+
 class UserController {
     async goWelcome ({ view}) {
         
@@ -296,6 +298,32 @@ class UserController {
         session.flash({status: 'Notification sent'})
         return response.redirect('back')
     }
+
+    async getAPI({request, session, response}){
+        const requestOptions = {    
+                method: 'POST',
+                uri: 'http://127.0.0.1:3333/api/v1/token',//https://urwallet.okwave.global/api/v1/getToken
+                qs: {
+                    "data": {
+                        "username" : "piji"
+                        // "username": "myprojectname",
+                        // "expired_hour": 24
+                    }
+                },
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                json: true,
+                gzip: true
+              };
+              
+              await rp(requestOptions).then(response => {
+                  console.log(response)
+              }).catch((err) => {
+                console.log('API call error:', err.message);
+              });
+    }
+    
 }
 
 module.exports = UserController
