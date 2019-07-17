@@ -29,7 +29,8 @@
     "@adonisjs/validator": "^5.0.6",
     "adonis-throttle": "^2.3.3",
     "nodemailer-juice": "^1.0.1",
-    "nodemailer-smtp-transport": "^2.7.4"
+    "nodemailer-smtp-transport": "^2.7.4",
+    "pusher": "^2.2.1"
   },
   "devDependencies": {},
   "autoload": {
