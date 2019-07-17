@@ -1,4 +1,5 @@
 # Node modules  //npm install
+node_modules
 
 # Adonis directory for storing tmp files
 tmp
@@ -7,3 +8,4 @@ tmp
 
 # The development sqlite file
 database/development.sqlite
+node_modules
