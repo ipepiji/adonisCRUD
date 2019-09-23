@@ -79,5 +79,7 @@ Route.group(() => {
     Route.get('/user','ApiController.getUser')
 })
 .prefix('/api/v1')
-.middleware('throttle:1')
+// .middleware('throttle:1')
 // .middleware(['auth:jwt'])
+
+Route.get('/diffTableName', 'UserController.test')

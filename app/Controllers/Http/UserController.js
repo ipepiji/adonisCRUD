@@ -2,6 +2,8 @@
 
 const Student = use('App/Models/Student');
 
+const Pelajar = use('App/Models/Pelajar');
+
 const { validate } = use('Validator');
 
 var transporter = use('App/ownModules/email-config');
@@ -323,6 +325,15 @@ class UserController {
                 console.log('API call error:', err.message);
               });
     }
+
+    async test ({view}) {
+        const pelajar = await Pelajar.findBy('id', 1)
+
+        return view.render('db/listbyid', {
+            data : pelajar
+        })
+    }
+
     
 }
 

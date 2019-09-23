@@ -218,8 +218,8 @@ module.exports = {
     */
     file: {
       driver: 'file',
-      name: 'adonis-app',
-      filename: 'adonis.log',
+      name: 'adonis-test-app',
+      filename: 'api-client.log',
       level: 'info'
     }
   },

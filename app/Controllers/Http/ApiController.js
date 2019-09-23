@@ -1,6 +1,7 @@
 'use strict'
 
 const Database = use('Database')
+const Logger = use('Logger')
 
 class ApiController {
 
@@ -30,8 +31,15 @@ class ApiController {
         }
 
         const { username } = request.all();
+
+        Logger
+            .transport('file')
+            .info(username, {
+                'url': request.url()
+            })
+
         return response.status(200).json({
-            username : username+" bin bapak kau"
+            username : username
         })
 
     }
