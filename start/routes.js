@@ -83,3 +83,29 @@ Route.group(() => {
 // .middleware(['auth:jwt'])
 
 Route.get('/diffTableName', 'UserController.test')
+
+//Unit/Functional test
+
+Route.get('/posts', async ({ response }) => {
+    
+    const data = { 
+                    title: "Adonis 101",
+                    body: "Blog post content"
+                 }
+
+    const Database = use('Database')
+
+    const posts = await Database
+                .table('posts')
+                .where(data)
+                .first()
+
+    if(posts)
+        response.status(200).json([data])
+    else
+        response.status(400).json({
+            status : 'error',
+            message : 'bad request'
+        })
+    
+  })
