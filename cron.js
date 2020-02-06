@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: __dirname + '/.env' })
 
 const cron = require('./function/task')
 
@@ -9,10 +9,12 @@ async function start() {
     const RESULT = await cron.cronYoutubeVideoDB(ACCESS_TOKEN);
 
     return RESULT;
-    
+
 }
 
 start()
     .then(function (result) {
+
         console.log(result);
+
     })

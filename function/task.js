@@ -54,6 +54,9 @@ async function getYoutubeVideoComment(access_token, video) {
         if (youtube_video.error)
             throw youtube_video.error.message;
 
+        if (youtube_video.items.length === 0)
+            console.log("No comment available!");
+
         return youtube_video.items;
 
     } catch (error) {
