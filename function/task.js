@@ -173,14 +173,20 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
 
             }
 
-            // const AI_RESULT = await FETCH(`http://10.6.2.147:5555/api/sentiment/?start_date=${EVENT[w].event_start.toISOString()}&end_date=${EVENT[w].event_end.toISOString()}&event_id=${EVENT[w].event_id}`, { method: "GET" });
+        }
 
-            // if (AI_RESULT === "Polarity calculation done...")
-            //     console.log("Successfully fetching AI's API");
-            // else {
-            //     console.log(AI_RESULT);
-            //     throw "Fail to fetch AI's API";
-            // }
+        for (let w in EVENT) {
+
+            let AI_RESULT = await FETCH(`http://10.6.2.147:5550/api/sentiment/?start_date=${EVENT[w].event_start.toISOString()}&end_date=${EVENT[w].event_end.toISOString()}&event_id=${EVENT[w].event_id}`, { method: "GET" });
+            AI_RESULT = await AI_RESULT.json();
+
+            if (AI_RESULT.Warning)
+                console.log("Fetching AI's API success but", AI_RESULT.Warning, "- event_id:", EVENT[w].event_id);
+            else if (AI_RESULT.Error)
+                console.log(AI_RESULT.Error, "- event_id:", EVENT[w].event_id);
+            else
+                console.log("Fetching AI's API success. - event_id:", EVENT[w].event_id);
+
         }
 
         await DB.close();
