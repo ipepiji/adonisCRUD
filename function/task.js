@@ -146,11 +146,18 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
 
                         const COMMENTS = await getYoutubeVideoComment(access_token, youtube_video[y]);
 
-                        const post = await DB.query(`SELECT id FROM social_medias WHERE platform = "Youtube" AND post = "${youtube_video[y].snippet.title}"`);
+                        const POST = await DB.query(`SELECT id FROM social_medias WHERE platform = "Youtube" AND post = "${youtube_video[y].snippet.title}"`);
 
                         for (let z in COMMENTS) {
-                            const DATETIME = new Date();
-                            await DB.query("UPDATE social_medias SET `citizen_comment` = '" + COMMENTS[z].snippet.topLevelComment.snippet.textDisplay + "', `like` = '" + STATISTIC.likeCount + "', `dislike` = '" + STATISTIC.dislikeCount + "', `share` = '" + STATISTIC.viewCount + "', `updated_at` = '" + DATETIME.toISOString() + "' WHERE `id` = '" + post[z].id + "'");
+
+                            if (POST[z]) {
+
+                                const DATETIME = new Date();
+
+                                await DB.query("UPDATE social_medias SET `citizen_comment` = '" + COMMENTS[z].snippet.topLevelComment.snippet.textDisplay + "', `like` = '" + STATISTIC.likeCount + "', `dislike` = '" + STATISTIC.dislikeCount + "', `share` = '" + STATISTIC.viewCount + "', `updated_at` = '" + DATETIME.toISOString() + "' WHERE `id` = '" + POST[z].id + "'");
+
+                            }
+
                         }
 
                     }
@@ -163,8 +170,11 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
                         const COMMENTS = await getYoutubeVideoComment(access_token, youtube_video[y]);
 
                         for (let z in COMMENTS) {
+
                             const DATETIME = new Date();
+
                             await DB.query("INSERT INTO social_medias(`platform`,`url`,`candidate`,`post`,`post_date`,`citizen_comment`,`like`,`dislike`,`share`,`created_at`,`updated_at`) VALUES ('Youtube','" + youtube_video[y].id.videoId + "','" + CANDIDATE[x].candidate_name + "','" + youtube_video[y].snippet.title + "','" + youtube_video[y].snippet.publishedAt + "','" + COMMENTS[z].snippet.topLevelComment.snippet.textDisplay + "','" + STATISTIC.likeCount + "','" + STATISTIC.dislikeCount + "','" + STATISTIC.viewCount + "','" + DATETIME.toISOString() + "','" + DATETIME.toISOString() + "')");
+
                         }
 
                     }
@@ -178,6 +188,7 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
         for (let w in EVENT) {
 
             let AI_RESULT = await FETCH(`http://10.6.2.147:5550/api/sentiment/?start_date=${EVENT[w].event_start.toISOString()}&end_date=${EVENT[w].event_end.toISOString()}&event_id=${EVENT[w].event_id}`, { method: "GET" });
+
             AI_RESULT = await AI_RESULT.json();
 
             if (AI_RESULT.Warning)
