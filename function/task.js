@@ -197,9 +197,8 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
         }
 
         console.log("----------------------------END----------------------------");
-        console.log("");
         await DB.close();
-        console.log("----------------------------DONE---------------------------");
+        return "----------------------------DONE---------------------------";
 
     } catch (err) {
 
