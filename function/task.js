@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const FETCH = require('node-fetch');
+const FETCH = require('axios');
 const DATABASE = require('../class/Database')
 
 // Function
@@ -18,17 +18,15 @@ async function getYoutubeVideoStatistic(access_token, video) {
             }
         });
 
-        youtube_video = await youtube_video.json();
-
-        if (youtube_video.error)
-            throw youtube_video.error.message;
+        youtube_video = youtube_video.data;
 
         return youtube_video.items[0].statistics;
 
-    } catch (error) {
+    } catch (err) {
 
-        console.log(error);
+        console.log(err.response.data.error.message);
         await DB.close();
+        console.log("---------------------------FAIL----------------------------");
         process.exit(1);
 
     }
@@ -49,19 +47,16 @@ async function getYoutubeVideoComment(access_token, video) {
             }
         });
 
-        youtube_video = await youtube_video.json();
-
-        if (youtube_video.error)
-            throw youtube_video.error.message;
+        youtube_video = youtube_video.data;
 
         if (youtube_video.items.length === 0)
             console.log("No comment available!");
 
         return youtube_video.items;
 
-    } catch (error) {
+    } catch (err) {
 
-        console.log(error);
+        console.log(err.response.data.error.message);
         return null;
 
     }
@@ -87,16 +82,14 @@ module.exports.getAccessToken = async function getAccessToken(client_id, client_
             method: 'POST'
         });
 
-        credential = await credential.json();
-
-        if (credential.error)
-            throw credential.error.message;
+        credential = credential.data;
 
         return credential.access_token;
 
-    } catch (error) {
+    } catch (err) {
 
-        console.log(error);
+        console.log(err.response.data.error.message);
+        console.log("---------------------------FAIL----------------------------");
         process.exit(1);
 
     }
@@ -108,6 +101,9 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
     try {
 
         const EVENT = await DB.query("SELECT * FROM events");
+
+        console.log("---------------------------START---------------------------");
+        console.log("******************Fetching YOUTUBE's API*******************");
 
         for (let w in EVENT) {
 
@@ -127,12 +123,7 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
                     }
                 });
 
-                youtube_video = await youtube_video.json()
-
-                if (youtube_video.error)
-                    throw youtube_video.error.message;
-
-                youtube_video = youtube_video.items;
+                youtube_video = youtube_video.data.items;
 
                 const SOCIAL_MEDIA = await DB.query("SELECT post FROM social_medias WHERE platform = 'Youtube'");
 
@@ -185,11 +176,16 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
 
         }
 
+        console.log("----------------------------END----------------------------");
+        console.log("");
+        console.log("---------------------------START---------------------------");
+        console.log("******************Fetching SHIBA(AI)'s API*****************");
+
         for (let w in EVENT) {
 
-            let AI_RESULT = await FETCH(`http://10.6.2.147:5550/api/sentiment/?start_date=${EVENT[w].event_start.toISOString()}&end_date=${EVENT[w].event_end.toISOString()}&event_id=${EVENT[w].event_id}`, { method: "GET" });
+            let AI_RESULT = await FETCH(`${process.env.SHIBA_URL}/api/sentiment/?start_date=${EVENT[w].event_start.toISOString()}&end_date=${EVENT[w].event_end.toISOString()}&event_id=${EVENT[w].event_id}`, { method: "GET" });
 
-            AI_RESULT = await AI_RESULT.json();
+            AI_RESULT = AI_RESULT.data;
 
             if (AI_RESULT.Warning)
                 console.log("Fetching AI's API success but", AI_RESULT.Warning, "- event_id:", EVENT[w].event_id);
@@ -200,13 +196,16 @@ module.exports.cronYoutubeVideoDB = async function cronYoutubeVideoDB(access_tok
 
         }
 
+        console.log("----------------------------END----------------------------");
+        console.log("");
         await DB.close();
-        return "Successfully inserting/updating the database!";
+        console.log("----------------------------DONE---------------------------");
 
-    } catch (error) {
+    } catch (err) {
 
-        console.log(error);
+        console.log(err.response.data.error.message);
         await DB.close();
+        console.log("---------------------------FAIL----------------------------");
         process.exit(1);
 
     }
