@@ -7,6 +7,9 @@ const axios = require('axios');
 
 const Youtube = use('App/Models/Youtube');
 
+var Web3 = require('web3')
+var web3 = new Web3(Web3.givenProvider || "ws://10.6.3.185:8844");
+
 class ApiController {
 
     async createToken({ request, response, auth }) {
@@ -189,6 +192,17 @@ class ApiController {
             status: "success",
             "message": "successfully insert into database"
         })
+    }
+
+
+    async createETHAccount({ response}) {
+
+        const account = await web3.eth.accounts.create();
+        return response.status(201).json({
+            status: "success",
+            data: account
+        })
+
     }
 
 }

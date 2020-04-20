@@ -135,7 +135,8 @@ module.exports = {
     enable: true,
     methods: ['POST', 'PUT', 'DELETE'],
     filterUris: [
-      '/api/v1/token'
+      '/api/v1/token',
+      '/create'
     ],
     cookieOptions: {
       httpOnly: false,

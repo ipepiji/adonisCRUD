@@ -113,3 +113,6 @@ Route.get('/posts', async ({ response }) => {
   //Youtube api
   Route.get('/youtubeInsert', 'ApiController.insert')
   Route.get('/youtubeUpdate', 'ApiController.update')
+
+  //ETH
+  Route.post('/create', 'ApiController.createETHAccount')

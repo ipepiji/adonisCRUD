@@ -41,7 +41,8 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "promise": "^8.0.3",
     "pusher": "^2.2.1",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "web3": "^1.2.6"
   },
   "devDependencies": {},
   "autoload": {
